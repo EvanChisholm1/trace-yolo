@@ -13,6 +13,8 @@ most_recent_p = None
 
 posns = []
 
+recent = {'width': 0, 'x': 0}
+
 model = get_model(model_id="yolov8n-640")
 for img in images:
     i += 1
@@ -25,9 +27,11 @@ for img in images:
     results.predictions = [p for p in results.predictions if p.class_name == "person" ]
     if len(results.predictions) > 0 and results.predictions[0]:
         pred = results.predictions[0]
-        most_recent_p = pred
         print(pred.x)
         posns.append({'x': pred.x, 'width': pred.width})
+        recnt = {'x': pred.x, 'width': pred.width}
+    else:
+        posns.append(recent)
     results = sv.Detections.from_inference(results)
     # print(results[0])
     # results = results.filter(results.class_id == 0)
